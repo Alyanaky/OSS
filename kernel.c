@@ -35,3 +35,15 @@ void kernel_main(void) {
         __asm__ __volatile__("wfi");
     }
 }
+
+// Точка входа
+void boot() {
+    // Инициализация BSS сегмента
+    for (char *p = __bss; p < __bss_end; p++) {
+        *p = 0;
+    }
+
+    // Вызов основной функции ядра
+    kernel_main();
+}
+

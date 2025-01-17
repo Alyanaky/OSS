@@ -1,28 +1,32 @@
 ENTRY(boot)
 
-SECTIONS {
-    . = 0x80200000;
+MEMORY
+{
+    RAM (rwx) : ORIGIN = 0x80000000, LENGTH = 128M
+}
 
-    .text :{
-        KEEP(*(.text.boot));
-        *(.text .text.*);
+SECTIONS
+{
+    . = 0x80400000;
+
+    .text : {
+        *(.text)
     }
 
-    .rodata : ALIGN(4) {
-        *(.rodata .rodata.*);
+    .rodata : {
+        *(.rodata)
     }
 
-    .data : ALIGN(4) {
-        *(.data .data.*);
+    .data : {
+        *(.data)
     }
 
-    .bss : ALIGN(4) {
+    .bss : {
         __bss = .;
-        *(.bss .bss.* .sbss .sbss.*);
+        *(.bss)
         __bss_end = .;
     }
 
-    . = ALIGN(4);
-    . += 128 * 1024; /* 128KB */
-    __stack_top = .;
+    __stack_top = ORIGIN(RAM) + LENGTH(RAM);
 }
+
